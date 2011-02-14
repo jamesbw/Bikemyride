@@ -1,9 +1,12 @@
-Bikeymride::Application.routes.draw do
-  get "pages/home"
+Bikemyride::Application.routes.draw do
+  get "users/new"
 
-  get "pages/contact"
+  root :to => 'pages#home'
+  match '/contact', :to => 'pages#contact'
+  match '/about',   :to => 'pages#about'
+  match '/help',    :to => 'pages#help'
+  match '/news',    :to => 'pages#news'
 
-  get "pages/about"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
