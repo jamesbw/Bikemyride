@@ -4,8 +4,8 @@ describe User do
 
   before(:each) do
     @attr = {
-      :name => "Example User",
-      :email => "user@example.com",
+      :name => "Exaridele User",
+      :email => "user@exaridele.com",
       :password => "foobar",
       :password_confirmation => "foobar"
     }
@@ -40,7 +40,7 @@ describe User do
 	end
 
 	it "should reject invalid email addresses" do
-		addresses = %w[user@foo,com user_at_foo.org example.user@foo.]
+		addresses = %w[user@foo,com user_at_foo.org exaridele.user@foo.]
 		addresses.each do |address|
 			invalid_email_user = User.new(@attr.merge(:email => address))
 			invalid_email_user.should_not be_valid
@@ -148,4 +148,31 @@ describe User do
       @user.should be_admin
     end
   end
+
+  describe "ride associations" do
+
+    before(:each) do
+      @user = User.create(@attr)
+      @ride1 = Factory(:ride, :user => @user, :created_at => 1.day.ago)
+      @ride2 = Factory(:ride, :user => @user, :created_at => 1.hour.ago)
+    end
+
+    it "should have a rides attribute" do
+      @user.should respond_to(:rides)
+    end
+
+    it "should have the right rides in the right order" do
+      @user.rides.should == [@ride2, @ride1]
+    end
+
+    it "should destroy associated rides" do
+      @user.destroy
+      [@ride1, @ride2].each do |ride|
+        Ride.find_by_id(ride.id).should be_nil
+      end
+    end
+  end
+
+  
+
 end

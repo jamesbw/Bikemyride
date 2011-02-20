@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
   def home
   	@title = "Home"
+    @ride = Ride.new if signed_in?
   end
 
   def contact

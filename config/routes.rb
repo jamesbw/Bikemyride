@@ -3,6 +3,7 @@ Bikemyride::Application.routes.draw do
 
   resources :users
   resources :sessions, :only => [:new, :create, :destroy]
+  resources :rides, :only => [:create, :destroy]
 
   
   match '/signin',  :to => 'sessions#new'

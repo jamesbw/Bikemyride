@@ -96,6 +96,13 @@ describe UsersController do
       response.should have_selector("h1>img", :class => "gravatar")
     end
 
+    it "should show the user's rides" do
+      ride1 = Factory(:ride, :user => @user, :content => "Foo bar")
+      ride2 = Factory(:ride, :user => @user, :content => "Baz quux")
+      get :show, :id => @user
+      response.should have_selector("span.content", :content => ride1.content)
+      response.should have_selector("span.content", :content => ride2.content)
+    end
   end
 
   describe "GET 'new'" do
