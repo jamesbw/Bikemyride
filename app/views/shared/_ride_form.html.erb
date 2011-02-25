@@ -1,3 +1,27 @@
+  <% content_for :extra_header_stuff do %>
+  	<%= javascript_include_tag "http://maps.google.com/maps/api/js?sensor=false" %>
+  	<%= javascript_include_tag "ride_creation.js" %>
+  <% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
 <%= form_for @ride do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>
   <div class="field">
@@ -7,3 +31,4 @@
     <%= f.submit "Submit" %>
   </div>
 <% end %>
+ -->
