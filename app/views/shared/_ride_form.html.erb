@@ -1,34 +1,49 @@
-  <% content_for :extra_header_stuff do %>
-  	<%= javascript_include_tag "http://maps.google.com/maps/api/js?sensor=false" %>
-  	<%= javascript_include_tag "ride_creation.js" %>
-  <% end %>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- 
-<%= form_for @ride do |f| %>
-  <%= render 'shared/error_messages', :object => f.object %>
-  <div class="field">
-    <%= f.text_area :content %>
-  </div>
-  <div class="actions">
-    <%= f.submit "Submit" %>
-  </div>
+<% content_for :extra_header_stuff do %>
+	<%= javascript_include_tag "http://maps.google.com/maps/api/js?sensor=false" %>
+	<%= javascript_include_tag "ride_creation.js" %>
+	<%= stylesheet_link_tag "ride_creation.css" %>
 <% end %>
- -->
+
+<div id="search_bar" class="left">
+	<ul id="sortable" class="left">
+		<li class="ui-state-default round"><span class="handle">A. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>
+		<li class="ui-state-default round"><span class="handle">B. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>
+	</ul>
+	<a href="#" class="ui-state-default round"id ="new_location">Add location</a>
+	<input type='submit' id="calc_route" class="ui-state-default round " value="Calc route"></input>
+	<input type='submit' id="save_route" class="ui-state-default round " value="Save route"></input>
+</div>
+	
+<div id="map" class="left round"></div>
+
+
+<!-- <div id="map_container">
+	<div id="search_bar" class="left">
+		<ul id="sortable">
+			<li class="ui-state-default round"><span class="handle">A. </span><input class="ui-state-default" type="text" value="One"></input> &#10008;</li>
+			<li class="ui-state-default round"><span class="handle">B. </span><input class="ui-state-default" type="text" value="Two"></input> &#10008;</li>
+			<li class="ui-state-default round"><span class="handle">C. </span>Three &#10008;</li>
+		</ul>
+	</div>
+	
+	<div id="map" class="left round"></div>
+</div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -18,6 +18,8 @@ section {
   font-size: 120%;
   padding: 20px;
   background: #fff;
+  position:relative;
+  height:600px;
 }
 
 section h1 {
@@ -127,11 +129,22 @@ td.main {
   padding: 1em;
 }
 
-td.sidebar {
-  width: 30%;
+/*.sidebar {
+  width: 140px;
   padding: 1em;
   vertical-align: top;
   background: #ffc;
+  float: left;
+
+}*/
+
+.sidebar{
+  width:15%;
+  min-width:150px;
+  float:right;
+  padding 1em;
+  background: #ffc;
+  height: 100%;
 }
 
 .profile img.gravatar {
@@ -253,4 +266,8 @@ form.new_ride textarea {
   height: 400px;
   width: 100%;
   w
+}*/
+/*table.front{
+  width: 100%;
+  height: 600px;
 }*/
