@@ -3,45 +3,56 @@ var directionsRenderer;
 var directionsService = new google.maps.DirectionsService();
 
 $(function(){
-	initialize();
+
+	//Set up map and renderer
+	initialize_map();
+
+
+	//Make unordered list sortable by jQuery UI. The letter before the input text field is the handle.
+	//On re-sort, the labels are updated and the route recalculated.
+	//The re-calc is only done if the dragged item has a non-empty location. This is because all empty locations get deleted when the route is calculated.
 	$("#sortable").sortable({handle: ".handle"});
-	$("#sortable").bind("sortupdate",function(){
+	$("#sortable").bind("sortupdate",function(e,ui){
 		relabel_locations();
-	});
-	
-	
-	$("input").hover(function(){
-		$(this).addClass("ui-state-hover");
-	}, function(){
-		$(this).removeClass("ui-state-hover");
+		if(ui.item.find("input").val() !=""){
+			calculate_route();	
+		}
 	});
 
+
+	//Bind the route calculation to its button
 	$("#calc_route").click(function(){calculate_route();});
 
-	// $(".delete").mousedown(function(){
-	// 	$(this).addClass("ui-state-active");
-	// });
+  //Add properties to initial list items (li). When new items are added, this function will be called again.
  	add_properties_to_destination_lis();
 
+
+ 	//The Add Location button will add a line item to #sortable if there are fewer than 10.
 	$("#new_location").click(function(){
-		if($("#sortable li").length == 10){
-			return false;
-		}
-		else{
-			$("#sortable").append('<li class="ui-state-default round"><span class="handle">D. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>');
-			$("#sortable li:last input").focus();
-			add_properties_to_destination_lis();
-			relabel_locations();
-			if($("#sortable li").length == 10){
-				$("#new_location").addClass("ui-state-disabled");
-			}
-			return false;
-		}
+		add_location();
+		return false;
 	});
 
 
 });
 
+
+//Adds a line item to #sortable if there are fewer than 10.
+//When there are ten, the button is disabled.
+//Every time a list item is added, the properties have to be set on this item. Currently all the line items are reset (inefficient but okay).
+function add_location(){
+	if($("#sortable li").length < 10){
+		$("#sortable").append('<li class="ui-state-default round"><span class="handle">D. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>');
+		$("#sortable li:last input").focus();
+		add_properties_to_destination_lis();
+		relabel_locations();
+		if($("#sortable li").length == 10){
+			$("#new_location").addClass("ui-state-disabled");
+		}
+	}
+}
+
+//This is called when the #sortable list gets shuffled. Notice the space after 'I' to make spacing more consistent.
 function relabel_locations(){
 	var LABELS = ['A','B','C','D','E','F','G','H','I ','J']
 	$("#sortable li").each(function(index){
@@ -49,35 +60,58 @@ function relabel_locations(){
 	});
 }
 
+//The properties to be added are: delete button, hovering, handling ENTER
 function add_properties_to_destination_lis(){
+
+
+	//delete: enabled if there are more than 2 locations
+	//re-enables the Add Location button in case it was disabled
+	//re-labels each line item
+	//re-calcs the route
 	$(".delete").click(function(){
 		if($("#sortable").children().length>2){
 			$(this).parent().remove();
 			$("#new_location").removeClass("ui-state-disabled");
+
 			relabel_locations();
-			return false;
+			calculate_route();
 		}
-		else{return false}
 	});
 	
+	//This is just some styling for hovering
 	$("input").hover(function(){
 		$(this).addClass("ui-state-hover");
 	}, function(){
 		$(this).removeClass("ui-state-hover");
 	});
+
+	//The ENTER handler to calculate the route when ENTER is pressed in a location field.
+	$("#sortable li input").keypress(function(event){
+		returnKeyHandler(event);
+	});
 }
 
-
+//Deletes empty locations, sends request to Google and feeds it to the renderer.
+//The location fields get updated with the response addresses.
 function calculate_route(){
+
+
+	//clear empty locations
+	$("#sortable li").each(function(){
+		if ($(this).find("input").val()=="" && $("#sortable li").length >2){
+			$(this).remove();
+			$("#new_location").removeClass("ui-state-disabled");
+		}
+	});
+	relabel_locations();
+
+	
 	var start= $("#sortable li:first input").val();
 	var end = $("#sortable li:last input").val();
 	var waypts= $("#sortable li:not(:first,:last) input").map(function(){
 		return {location: this.value, stopover: true};
 	}).get();
 
-
-	// console.log(start + " " + end	);
-	// console.log(waypts[0].location + " " +waypts[1].stopover);
 
 	var request = {
         origin: start, 
@@ -98,6 +132,7 @@ function calculate_route(){
 
 }
 
+//Replaces the locations with the nicer and fuller addresses returned by Google
 function update_location_fields(){
 	var legs = directionsRenderer.directions.routes[0].legs;
 	for( var i=0; i<legs.length; i++){
@@ -106,7 +141,27 @@ function update_location_fields(){
 	}
 }
 
-function initialize(){
+//Trigger a route request when the ENTER key is pressed in a location field.
+//Taken from http://gmaps-samples-v3.googlecode.com/svn/trunk/elevation/elevation-profile.html
+function returnKeyHandler(e) {
+  var keycode;
+  if (window.event) {
+    keycode = window.event.keyCode;
+  } else if (e) {
+    keycode = e.which;
+  } else {
+    return true;
+  }
+  if (keycode == 13) {
+     calculate_route();
+     return false;
+  } else {
+     return true;
+  }
+}
+
+//Set up the map. Create the renderer
+function initialize_map(){
 	
 	//Map options
 	
@@ -125,11 +180,16 @@ function initialize(){
 	var rendererOptions = {
 		draggable: true,
 		map: map,
-		suppressBicyclingLayer: true,
 	};
 
 	directionsRenderer= new google.maps.DirectionsRenderer(rendererOptions);
+
+	//Update the location fields if the markers are dragged on the map.
 	google.maps.event.addListener(directionsRenderer,"directions_changed",function(){
 		update_location_fields();
 	});
+
+	//Add the bike layer
+	var bikeLayer = new google.maps.BicyclingLayer();
+  bikeLayer.setMap(map);
 }
