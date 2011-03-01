@@ -125,6 +125,10 @@ function calculate_route(){
     if (status == google.maps.DirectionsStatus.OK) {
     	console.log("got response");
       directionsRenderer.setDirections(response);
+
+      
+
+
       update_location_fields();
     }
     else {alert("something went wrong")}
@@ -186,10 +190,80 @@ function initialize_map(){
 
 	//Update the location fields if the markers are dragged on the map.
 	google.maps.event.addListener(directionsRenderer,"directions_changed",function(){
+		console.log("directions changed");
 		update_location_fields();
+		console.log(request_to_be_saved());
 	});
 
 	//Add the bike layer
 	var bikeLayer = new google.maps.BicyclingLayer();
   bikeLayer.setMap(map);
+}
+
+
+
+//Generates a JSON-serialized string to be stored in the database.
+//For example: {"origin":"San Francisco, CA, USA","destination":"Point Reyes, Northwest Marin, CA 94956, USA","waypoints":[{"location":"sausalito","stopover":true},{"location":"(38.11682094472847, -122.5699073486328)","stopover":false}]}
+//toString is applied to all locations. Locations in the API can be either a string or a LatLng object. toString on a LatLng object returns a usable string for a geocoding request.
+//Travel mode and waypoint optimization are not saved because assumed to be Bicycling and False always.
+function request_to_be_saved(){
+
+	var dir = directionsRenderer.directions;
+
+	var orig = dir.Mf.origin.toString();
+	var dest = dir.Mf.destination.toString();
+	var waypts = [];
+
+	for(var i = 0; i < dir.Mf.waypoints.length; i++){
+		var wpt = {
+								location: dir.Mf.waypoints[i].location.toString(),
+								stopover: dir.Mf.waypoints[i].stopover,
+							};
+		waypts.push(wpt);
+	}
+
+	var request = {
+      origin: orig, 
+      destination: dest,
+      waypoints: waypts,
+  };
+
+  return JSON.stringify(request);
+}
+
+//Builds the request object from the serialized string.
+//request format for directionsService is
+// var request = {
+//       origin: start, 
+//       destination: end,
+//       waypoints: waypts,
+//       optimizeWaypoints: false,
+//       travelMode: google.maps.DirectionsTravelMode.BICYCLING,
+//   };
+function build_request(request_string){
+
+	var request = JSON.parse(request_string);
+
+	request.optimizeWaypoints = false;
+	request.travelMode = google.maps.DirectionsTravelMode.BICYCLING;
+
+	return request;
+
+}
+
+
+//Just a test function to see if the saving and loading of the path works.
+function use_saved_request(){
+	directionsService.route(build_request(request_to_be_saved()), function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+    	console.log("got response");
+      directionsRenderer.setDirections(response);
+
+      
+
+
+      update_location_fields();
+    }
+    else {alert("something went wrong")}
+	});
 }
