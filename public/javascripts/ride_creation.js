@@ -208,16 +208,18 @@ function initialize_map(){
 //Travel mode and waypoint optimization are not saved because assumed to be Bicycling and False always.
 function request_to_be_saved(){
 
-	var dir = directionsRenderer.directions;
 
-	var orig = dir.Mf.origin.toString();
-	var dest = dir.Mf.destination.toString();
+	var directions_holder = directions_subobject_Mf();
+
+
+	var orig = directions_holder.origin.toString();
+	var dest = directions_holder.destination.toString();
 	var waypts = [];
 
-	for(var i = 0; i < dir.Mf.waypoints.length; i++){
+	for(var i = 0; i < directions_holder.waypoints.length; i++){
 		var wpt = {
-								location: dir.Mf.waypoints[i].location.toString(),
-								stopover: dir.Mf.waypoints[i].stopover,
+								location: directions_holder.waypoints[i].location.toString(),
+								stopover: directions_holder.waypoints[i].stopover,
 							};
 		waypts.push(wpt);
 	}
@@ -229,6 +231,23 @@ function request_to_be_saved(){
   };
 
   return JSON.stringify(request);
+}
+
+
+//Returns a reference to the subobject of directionsRenderer that contains the request info. This function is necessary because the google naming changes constantly.
+// For instance, this object used to be accessible through directionsRenderer.directions.Mf.origin, but Mf changed to Jf today.
+function directions_subobject_Mf(){
+
+	var dir = directionsRenderer.directions;
+
+	var directions_subobject;
+	for(var property in dir){
+		if(dir[property].origin){
+			directions_subobject=dir[property];
+			break;			
+		}
+	}
+	return directions_subobject;
 }
 
 //Builds the request object from the serialized string.
