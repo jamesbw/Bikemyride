@@ -10,6 +10,6 @@ Factory.sequence :email do |n|
 end
 
 Factory.define :ride do |ride|
-  ride.content "Foo bar"
+  ride.route "Foo bar"
   ride.association :user
 end

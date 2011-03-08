@@ -41,7 +41,10 @@ input:hover{
 .delete{
 	cursor: pointer;
 }
-#new_location{
+#new_location, #calc_route{
 	padding:2px;
 	color: white;
+}
+#new_location:hover, #calc_route:hover{
+	text-decoration: none;
 }

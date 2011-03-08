@@ -21,7 +21,7 @@ namespace :db do
                    
     User.all(:limit => 6).each do |user|
       50.times do
-        user.rides.create!(:content => Faker::Lorem.sentence(5))
+        user.rides.create!(:route => Faker::Lorem.sentence(5))
       end
     end
 

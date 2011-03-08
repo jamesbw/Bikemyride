@@ -4,14 +4,23 @@
 	<%= stylesheet_link_tag "ride_creation.css" %>
 <% end %>
 
+
+
 <div id="search_bar" class="left">
 	<ul id="sortable" class="left">
 		<li class="ui-state-default round"><span class="handle">A. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>
 		<li class="ui-state-default round"><span class="handle">B. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>
 	</ul>
 	<a href="#" class="ui-state-default round"id ="new_location">Add location</a>
-	<input type='submit' id="calc_route" class="ui-state-default round " value="Calc route"></input>
-	<input type='submit' id="save_route" class="ui-state-default round " value="Save route"></input>
+	<a  href='#' id="calc_route" class="ui-state-default round "> Calc route</a>
+
+	<%= form_for @ride do |f| %>
+		<%= render 'shared/error_messages', :object => f.object %>
+		<%= f.text_field :route, :type => 'hidden' %>
+		<%= f.submit "Save route",:class => 'ui-state-default round', :id => 'save-route' %>
+	<% end -%>
+	
+<!-- 	<input type='submit' id="save_route" class="ui-state-default round " value="Save route"></input> -->
 </div>
 	
 <div id="map" class="left round"></div>

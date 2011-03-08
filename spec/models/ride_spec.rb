@@ -3,7 +3,8 @@ require 'spec_helper'
 describe Ride do
   before(:each) do
     @user = Factory(:user)
-    @attr = { :content => "value for content" }
+    #should have route validation
+    @attr = { :route => "value for route" }
   end
 
   it "should create a new instance given valid attributes" do
@@ -32,7 +33,7 @@ describe Ride do
     end
 
     it "should require nonblank content" do
-      @user.rides.build(:content => "  ").should_not be_valid
+      @user.rides.build(:route => "  ").should_not be_valid
     end
 
   end

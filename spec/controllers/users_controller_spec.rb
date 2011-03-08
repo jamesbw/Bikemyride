@@ -97,11 +97,11 @@ describe UsersController do
     end
 
     it "should show the user's rides" do
-      ride1 = Factory(:ride, :user => @user, :content => "Foo bar")
-      ride2 = Factory(:ride, :user => @user, :content => "Baz quux")
+      ride1 = Factory(:ride, :user => @user, :route => "Foo bar")
+      ride2 = Factory(:ride, :user => @user, :route => "Baz quux")
       get :show, :id => @user
-      response.should have_selector("span.content", :content => ride1.content)
-      response.should have_selector("span.content", :content => ride2.content)
+      response.should have_selector("span.content", :content => ride1.route)
+      response.should have_selector("span.content", :content => ride2.route)
     end
   end
 

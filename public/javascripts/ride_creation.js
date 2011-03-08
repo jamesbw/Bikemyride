@@ -21,7 +21,7 @@ $(function(){
 
 
 	//Bind the route calculation to its button
-	$("#calc_route").click(function(){calculate_route();});
+	$("#calc_route").click(function(){calculate_route();return false;});
 
   //Add properties to initial list items (li). When new items are added, this function will be called again.
  	add_properties_to_destination_lis();
@@ -79,7 +79,7 @@ function add_properties_to_destination_lis(){
 	});
 	
 	//This is just some styling for hovering
-	$("input").hover(function(){
+	$("#search_bar a").add("#search_bar input").hover(function(){
 		$(this).addClass("ui-state-hover");
 	}, function(){
 		$(this).removeClass("ui-state-hover");
@@ -189,9 +189,11 @@ function initialize_map(){
 	directionsRenderer= new google.maps.DirectionsRenderer(rendererOptions);
 
 	//Update the location fields if the markers are dragged on the map.
+	//Update the hidden form that will save the route.
 	google.maps.event.addListener(directionsRenderer,"directions_changed",function(){
 		console.log("directions changed");
 		update_location_fields();
+		update_hidden_form();
 		console.log(request_to_be_saved());
 	});
 
@@ -200,7 +202,10 @@ function initialize_map(){
   bikeLayer.setMap(map);
 }
 
-
+function update_hidden_form(){
+	$("#ride_route").val(request_to_be_saved());
+	console.log("hidden form has been updated");
+}
 
 //Generates a JSON-serialized string to be stored in the database.
 //For example: {"origin":"San Francisco, CA, USA","destination":"Point Reyes, Northwest Marin, CA 94956, USA","waypoints":[{"location":"sausalito","stopover":true},{"location":"(38.11682094472847, -122.5699073486328)","stopover":false}]}
