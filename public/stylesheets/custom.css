@@ -1,7 +1,7 @@
 
 
 body {
-  background: #cff;
+  background: #67b021;
 }
 
 header {
@@ -15,11 +15,13 @@ header img {
 
 section {
   margin-top: 1em;
+  margin-bottom: 2em;
   font-size: 120%;
   padding: 20px;
-  background: #fff;
-  position:relative;
-  height:600px;
+/*  background: #fff;
+*/  position:relative;
+background: url("./images/ui-bg_highlight-hard_100_f5f3e5_1x100.png") repeat-x scroll 50% top #F5F3E5;
+  /*height:600px;*/
 }
 
 section h1 {
@@ -45,13 +47,13 @@ a:visited {
 
 /* Navigation */
 
-nav {
+/*nav {
   float: right;
-}
+}*/
 
 nav {
-  background-color: white;
-  padding: 0 0.7em;
+/*  background-color: white;
+*/  padding: 0 0.7em;
   white-space: nowrap;
 }
 
@@ -62,8 +64,8 @@ nav ul {
 
 nav ul li {
   list-style-type: none;
-  display: inline-block;
-  padding: 0.2em 0;
+  display: table-cell;
+  padding: 0.4em 0.8em;
 }
 
 nav ul li a {
@@ -112,6 +114,7 @@ footer {
   margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
+  clear: both;
 }
 
 /* User show page */
@@ -259,4 +262,19 @@ form.new_ride {
 form.new_ride textarea {
   height: 4em;
   margin-bottom: 0;
+}
+
+#banner{
+  display: block;
+}
+
+nav{
+  margin-top: 1em;
+  display: inline-block;
+  float: right;
+  font-size: 150%;
+}
+
+#bottom_nav ul li{
+  display: inline;
 }

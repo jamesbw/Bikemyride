@@ -4,8 +4,13 @@ var directionsService = new google.maps.DirectionsService();
 
 $(function(){
 
+
 	//Set up map and renderer
 	initialize_map();
+
+
+	//Make floated objects the same height. Uses a jQuery plugin.
+	$("section").fixHeight();
 
 
 	//Make unordered list sortable by jQuery UI. The letter before the input text field is the handle.

@@ -1,0 +1,39 @@
+<html>
+  <head>
+	<style type="text/css">
+	  img {border: none;}
+	</style>
+  </head>
+  <body>
+
+  <h1>Elixon FixHeight Documentation</h1>
+
+  <a href="index.html"><img src="screenshots/fixheight.png"/></a>
+
+  <p>Creating equal height columns with CSS is not as easy as it may
+  first seem. Elixon FixHeight is a solution that works in all common
+  web browsers.</p>
+
+  <p>Elixon FixHeight makes all floating blocks on the same row be the
+  same height. In addition to this Elixon FixHeight adds class names
+  containing row and column ordinal numbers to each floating block.</p>
+
+  <h2>Usage</h2>
+  <pre>
+&lt;div class=&quot;myListing&quot;&gt;
+	&lt;div&gt;&lt;h3&gt;#1&lt;/h3&gt;&lt;p&gt;Lorem ipsum dolor sit amet much much much longer. &lt;/p&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;h3&gt;#2&lt;/h3&gt;&lt;p&gt;Lorem ipsum dolor sit amet &lt;/p&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;h3&gt;#3&lt;/h3&gt;&lt;p&gt;Lorem ipsum&lt;/p&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;h3&gt;#4&lt;/h3&gt;&lt;p&gt;Lorem ipsum&lt;/p&gt;&lt;/div&gt;	  
+	&lt;div&gt;&lt;h3&gt;#5&lt;/h3&gt;&lt;p&gt;Lorem ipsum dolor sit amet much much much longer.&lt;/p&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;h3&gt;#6&lt;/h3&gt;&lt;p&gt;Lorem ipsum dolor sit amet &lt;/p&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;h3&gt;#7&lt;/h3&gt;&lt;p&gt;Lorem ipsum dolor much longer&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;<b>$(&apos;.myListing&apos;).fixHeight();</b>&lt;/script&gt;
+  </pre>
+
+  <hr/>
+  <a href="http://www.webdevelopers.eu">©2011 Daniel Ševčík</a>
+  
+</body>
+</html>

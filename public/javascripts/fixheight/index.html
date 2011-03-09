@@ -1,0 +1,64 @@
+<html>
+  <head>
+	<title>Elixon FixHeight Demonstration</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript"></script>
+	<script src="jquery.fixheight.js" type="text/javascript"></script>	
+	<style type="text/css">
+	  body {
+	  padding: 20px;
+	  }
+	  .box {
+	    -moz-box-sizing: border-box;
+	    box-sizing: border-box;		  
+	    width: 620px;
+	    padding: 2px;
+	    border: 1px dotted black;
+	    overflow: hidden;
+	    margin: 10px;
+		font-size: 10px;
+	  }
+	  .box h3 {
+	    text-align: center;
+	    margin: 16px 0px 0px 0px;
+	    color: gray;
+	  }
+	  .box p {
+	    padding: 2px 10px;
+	  }
+	  .box div {
+	    background-color: #EEE;
+	    border: 1px solid gray;
+		border-radius: 15px;
+		-moz-border-radius: 15px;		
+	    resize: both;
+	    width: 100px;
+	    float: left;
+	    overflow: hidden;
+	  }
+	  .box div:hover {
+	    background-color: yellow;
+	  }
+	</style>
+  </head>
+  <body>
+	<h1>jQuery Elixon FixHeight Demonstration</h1>
+	<form onsubmit="return false">
+	  <button onclick="$('.box').fixHeight();">Fix Height</button> 
+	  <button onclick="$('.box div').height('auto').width(function() {return Math.floor(Math.random()*2+1)*100;});">Random Width</button>
+	  <div class="box">
+		<div><h3>#1</h3><p>Lorem ipsum dolor sit amet much much much longer much much longer </p></div>
+		<div><h3>#2</h3><p>Lorem ipsum dolor sit amet </p></div>
+		<div><h3>#3</h3><p>Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet much much much longer much much longer</p></div>
+		<div><h3>#4</h3><p>Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet much much much longer much much longer</p></div>	  
+		<div><h3>#5</h3><p>Lorem ipsum dolor sit amet much much much longer much much longer </p></div>
+		<div><h3>#6</h3><p>Lorem ipsum dolor sit amet </p></div>
+		<div><h3>#7</h3><p>Lorem ipsum dolor much longer</p></div>
+		<div><h3>#8</h3><p>Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet much much much longer much much longer</p></div>	  
+		<div><h3>#9</h3><p>Lorem ipsum dolor sit amet much much much longer much much longer </p></div>
+		<div><h3>#10</h3><p>Lorem ipsum dolor sit amet </p></div>
+		<div><h3>#11</h3><p>Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet much much much longer much much longer</p></div>
+		<div><h3>#12</h3><p>Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet much much much longer much much longer</p></div>	  
+	  </div>
+	</form>
+  </body>
+</html>
