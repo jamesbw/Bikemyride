@@ -30,8 +30,8 @@ input:hover{
 #sortable{
 	padding:0;
 /*	min-width:240px;
-	width:25%;
-	list-style-type: none;*/
+	width:25%;*/
+	list-style-type: none;
 }
 #search_bar{
 	min-width:240px;

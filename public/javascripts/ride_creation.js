@@ -139,6 +139,9 @@ function calculate_route(){
     else {alert("something went wrong")}
 	});
 
+//In case error messages from map saving were still there, hide them.
+	$("#error_explanation").hide();
+
 }
 
 //Replaces the locations with the nicer and fuller addresses returned by Google
