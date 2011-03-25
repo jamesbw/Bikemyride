@@ -2,7 +2,7 @@ module ApplicationHelper
 
 
   def logo
-    image_tag("bike_header.jpg", :alt => "Bike My Ride", :class => "round", :id => "banner")
+    image_tag("header.png", :alt => "Bike My Ride", :class => "round", :id => "banner")
   end
 
 

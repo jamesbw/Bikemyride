@@ -10,7 +10,7 @@ header {
 
 header img {
   padding: 1em;
-  background: #fff;
+  background: none;
 }
 
 section {
@@ -215,27 +215,27 @@ h1.ride {
   margin-bottom: 0.3em;
 }
 
-table.rides {
+div.rides {
   margin-top: 1em;
 }
-
-table.rides tr {
+/*
+div.rides div.ride {
   height: 70px;
-}1
+}1*/
 
-table.rides tr td.gravatar {
+div.rides tr td.gravatar {
   border-top: 1px solid #ccc;
   vertical-align: top;
   width: 50px;
 }
 
-table.rides tr td.ride {
+div.rides div.ride {
   border-top: 1px solid #ccc;
   vertical-align: top;
   padding-top: 10px;
 }
 
-table.rides tr td.ride span.timestamp {
+div.rides div.ride span.timestamp {
   display: block;
   font-size: 85%;
   color: #666;
@@ -253,7 +253,7 @@ div.user_info span.user_name {
   position: absolute;
 }
 
-div.user_info span.rides {
+div.user_info div.rides {
   font-size: 80%;
 }
 
