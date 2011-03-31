@@ -263,39 +263,39 @@ function directions_subobject_Mf(){
 	return directions_subobject;
 }
 
-//Builds the request object from the serialized string.
-//request format for directionsService is
-// var request = {
-//       origin: start, 
-//       destination: end,
-//       waypoints: waypts,
-//       optimizeWaypoints: false,
-//       travelMode: google.maps.DirectionsTravelMode.BICYCLING,
-//   };
-function build_request(request_string){
+// //Builds the request object from the serialized string.
+// //request format for directionsService is
+// // var request = {
+// //       origin: start, 
+// //       destination: end,
+// //       waypoints: waypts,
+// //       optimizeWaypoints: false,
+// //       travelMode: google.maps.DirectionsTravelMode.BICYCLING,
+// //   };
+// function build_request(request_string){
 
-	var request = JSON.parse(request_string);
+// 	var request = JSON.parse(request_string);
 
-	request.optimizeWaypoints = false;
-	request.travelMode = google.maps.DirectionsTravelMode.BICYCLING;
+// 	request.optimizeWaypoints = false;
+// 	request.travelMode = google.maps.DirectionsTravelMode.BICYCLING;
 
-	return request;
+// 	return request;
 
-}
+// }
 
 
-//Just a test function to see if the saving and loading of the path works.
-function use_saved_request(){
-	directionsService.route(build_request(request_to_be_saved()), function(response, status) {
-    if (status == google.maps.DirectionsStatus.OK) {
-    	console.log("got response");
-      directionsRenderer.setDirections(response);
+// //Just a test function to see if the saving and loading of the path works.
+// function use_saved_request(dirRenderer, request){
+// 	directionsService.route(build_request(request), function(response, status) {
+//     if (status == google.maps.DirectionsStatus.OK) {
+//     	console.log("got response");
+//       dirRenderer.setDirections(response);
 
       
 
 
-      update_location_fields();
-    }
-    else {alert("something went wrong")}
-	});
-}
+//       update_location_fields();
+//     }
+//     else {alert("something went wrong")}
+// 	});
+// }

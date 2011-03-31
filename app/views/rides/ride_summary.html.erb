@@ -1,0 +1,6 @@
+
+<div id= "<%= 'map'+ @ride.id.to_s %>" class="map left round"></div>
+<span class="route" style="display:none;"> <%=@ride.route -%> </span>
+<span class="timestamp">
+  Created <%= time_ago_in_words(@ride.created_at) %> ago.
+</span>

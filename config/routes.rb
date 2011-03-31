@@ -3,7 +3,7 @@ Bikemyride::Application.routes.draw do
 
   resources :users
   resources :sessions, :only => [:new, :create, :destroy]
-  resources :rides, :only => [:create, :destroy]
+  resources :rides, :only => [:create, :destroy, :show_summary]
 
   
   match '/signin',  :to => 'sessions#new'
@@ -16,6 +16,8 @@ Bikemyride::Application.routes.draw do
   match '/help',    :to => 'pages#help'
   match '/news',    :to => 'pages#news'
   match '/signup',  :to => 'users#new'
+
+  match '/rides/show_summary/:id', :to => 'rides#show_summary', :as => 'show_summary'
 
 
   # The priority is based upon order of creation:

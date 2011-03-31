@@ -14,4 +14,11 @@ class RidesController < ApplicationController
 	def destroy
 	end
 
+  def show_summary
+    @ride = Ride.find(params[:id])
+    respond_to do |format| 
+      format.js { render 'rides/ride_summary' }
+    end
+  end
+
 end
