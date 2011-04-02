@@ -14,6 +14,8 @@ class RidesController < ApplicationController
 	def destroy
 	end
 
+
+  # show_summary renders a summary view of the ride in the profile page. This view is loaded only when the ride header is clicked on
   def show_summary
     @ride = Ride.find(params[:id])
     respond_to do |format| 

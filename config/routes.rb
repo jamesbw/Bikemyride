@@ -17,6 +17,7 @@ Bikemyride::Application.routes.draw do
   match '/news',    :to => 'pages#news'
   match '/signup',  :to => 'users#new'
 
+  #for the lazy-loading of the rides in the profile page
   match '/rides/show_summary/:id', :to => 'rides#show_summary', :as => 'show_summary'
 
 

@@ -263,6 +263,8 @@ function directions_subobject_Mf(){
 	return directions_subobject;
 }
 
+//Moved to application.js because it's used in mutliple pages
+
 // //Builds the request object from the serialized string.
 // //request format for directionsService is
 // // var request = {

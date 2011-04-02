@@ -1,17 +1,8 @@
-<!-- <tr>
-  <td class="ride">
-    <span class="content"><%= ride.route %></span>
-    <span class="timestamp">
-      Posted <%= time_ago_in_words(ride.created_at) %> ago.
-    </span>
-  </td>
-</tr> -->
+<!-- this is the standard accordion layout for jQuery UI. See their demo page for details. -->
 
 <h3><a href="#">Ride Title</a></h3>
+
 <div class="ride" id="<%= ride.id %>">
-<!--     <span class="content"><%= ride.route %></span>
-    <span class="timestamp">
-      Created <%= time_ago_in_words(ride.created_at) %> ago.
-    </span> -->
+<!-- content is loaded lazily through ajax -->
 </div>
 

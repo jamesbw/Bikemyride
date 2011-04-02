@@ -45,10 +45,7 @@ function use_saved_request(dirRenderer, request){
     	console.log("got response");
       dirRenderer.setDirections(response);
 
-      
-
-
-      // update_location_fields();
+      // dirRenderer.getMap().getDiv().style.display = 'block';
     }
     else {alert("something went wrong")}
 	});
