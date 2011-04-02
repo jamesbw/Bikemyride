@@ -1,4 +1,7 @@
-
+.container{
+  min-width: 950px;
+  width: 80%;
+}
 
 body {
   background: #67b021;
@@ -143,8 +146,10 @@ td.main {
 }*/
 
 .sidebar{
-  width:15%;
+/*  width:15%;
   min-width:150px;
+*/  
+  width:150px;
   float:right;
   padding 1em;
   background: #ffc;

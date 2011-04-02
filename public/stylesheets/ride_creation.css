@@ -1,4 +1,11 @@
-
+#graph{
+	height:20%;
+	min-height:100px;
+	background: blue;
+	min-width: 450px;
+	width: 100%;
+	margin:0px auto 10px auto;
+}
 
 .handle{
 	cursor: move;
@@ -22,10 +29,10 @@ input:hover{
 
 #map{
 	min-height:450px;
-	height: 70%;
+	height: 80%;
 	min-width: 450px;
-	width: 50%;
-	margin:0 auto;
+	width: 100%;
+	margin:0px auto 10px auto;
 }
 #sortable{
 	padding:0;
@@ -34,8 +41,9 @@ input:hover{
 	list-style-type: none;
 }
 #search_bar{
-	min-width:240px;
-	width:25%;
+	/*min-width:240px;
+	width:25%;*/
+	width:240px;
 	list-style-type: none;
 }
 .delete{
@@ -47,4 +55,11 @@ input:hover{
 }
 #new_location:hover, #calc_route:hover{
 	text-decoration: none;
+}
+#middle_column{
+	min-width: 450px;
+	width: 50%;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0px 20px;
 }

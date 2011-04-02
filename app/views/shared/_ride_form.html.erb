@@ -5,26 +5,38 @@
 <% end %>
 
 
-
-	<!-- <div class="left">This is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of textThis is a lot of text.This is a lot of text</div> -->
 <div id="search_bar" class="left">
 	<%= form_for @ride do |f| %>
 		<%= render 'shared/error_messages', :object => f.object %>
 		<%= f.text_field :route, :type => 'hidden' %>
 		<%= f.submit "Save route",:class => 'ui-state-default round', :id => 'save-route' %>
-	<% end -%>
+	
+
+	<%= form_tag "#", :id => "route_form" do |f| %>
+	  
+	
 		<ul id="sortable" class="left">
 			<li class="ui-state-default round"><span class="handle">A. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>
 			<li class="ui-state-default round"><span class="handle">B. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>
 		</ul>
+		<input  type="submit" id="calc_route" class="ui-state-default round " value="Calc route" ></input>
 		<a href="#" class="ui-state-default round"id ="new_location">Add location</a>
-		<a  href='#' id="calc_route" class="ui-state-default round "> Calc route</a>
+
+	<% end -%>
 
 	
 </div>
-	
-<div id="map" class="left round"></div>
 
+
+<div id="middle_column" class="left clearfix">	
+	<%= f.label :title, "Title" -%>
+	<%= f.text_field :title %><br />
+	<%= f.label :description, "Description" %>
+	<%= f.text_area :description %><br />
+	<% end -%>
+	<div id="map" class="round"></div>
+	<div id="graph"><h1>Elevation graph coming here</h1></div>
+</div>
 
 
 

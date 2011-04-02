@@ -9,8 +9,33 @@ $(function(){
 	initialize_map();
 
 
+	//Resizing of middle_column:
+	var search_bar_width = $("#search_bar").outerWidth(true);//true: include margin
+	var sidebar_width = $(".sidebar").outerWidth(true);
+	var section_width = $("section").width();
+	$("#middle_column").width(section_width - search_bar_width - sidebar_width -50);
+	$("#middle_column").height((section_width - search_bar_width - sidebar_width -50)*9/16);
+
+
 	//Make floated objects the same height. Uses a jQuery plugin.
-	$("section").fixHeight();
+	// $("section").fixHeight();
+	var tallest = 0;
+	$('section')
+	.each(function(){
+		var thisHeight = $(this).outerHeight();
+		if (thisHeight > tallest) tallest = thisHeight;
+	})
+	.css({
+		'overflow': 'auto',
+		'height': tallest
+	});
+
+
+	//Make route_form submit by Ajax
+	$("#route_form").submit(function(){
+		calculate_route();
+		return false;
+	});
 
 
 	//Make unordered list sortable by jQuery UI. The letter before the input text field is the handle.
@@ -91,9 +116,9 @@ function add_properties_to_destination_lis(){
 	});
 
 	//The ENTER handler to calculate the route when ENTER is pressed in a location field.
-	$("#sortable li input").keypress(function(event){
-		returnKeyHandler(event);
-	});
+	// $("#sortable li input").keypress(function(event){
+	// 	returnKeyHandler(event);
+	// });
 }
 
 //Deletes empty locations, sends request to Google and feeds it to the renderer.
@@ -155,22 +180,22 @@ function update_location_fields(){
 
 //Trigger a route request when the ENTER key is pressed in a location field.
 //Taken from http://gmaps-samples-v3.googlecode.com/svn/trunk/elevation/elevation-profile.html
-function returnKeyHandler(e) {
-  var keycode;
-  if (window.event) {
-    keycode = window.event.keyCode;
-  } else if (e) {
-    keycode = e.which;
-  } else {
-    return true;
-  }
-  if (keycode == 13) {
-     calculate_route();
-     return false;
-  } else {
-     return true;
-  }
-}
+// function returnKeyHandler(e) {
+//   var keycode;
+//   if (window.event) {
+//     keycode = window.event.keyCode;
+//   } else if (e) {
+//     keycode = e.which;
+//   } else {
+//     return true;
+//   }
+//   if (keycode == 13) {
+//      calculate_route();
+//      return false;
+//   } else {
+//      return true;
+//   }
+// }
 
 //Set up the map. Create the renderer
 function initialize_map(){

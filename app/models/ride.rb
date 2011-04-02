@@ -1,13 +1,15 @@
 # == Schema Information
-# Schema version: 20110307013029
+# Schema version: 20110402060835
 #
 # Table name: rides
 #
-#  id         :integer         not null, primary key
-#  user_id    :integer
-#  created_at :datetime
-#  updated_at :datetime
-#  route      :text
+#  id          :integer         not null, primary key
+#  user_id     :integer
+#  created_at  :datetime
+#  updated_at  :datetime
+#  route       :text
+#  title       :string(255)
+#  description :text
 #
 
 class Ride < ActiveRecord::Base
