@@ -2,33 +2,55 @@ var map;
 var directionsRenderer;
 var directionsService = new google.maps.DirectionsService();
 
+function resize_elements(){
+	
+	var search_bar_width = $("#search_bar").outerWidth(true);//true: include margin
+	var sidebar_width = $(".sidebar").outerWidth(true);
+	var section_width = $("section").width();
+	var middle_column_width = section_width - search_bar_width - sidebar_width -50
+	$("#middle_column").width(middle_column_width);
+	$("#map").height($("#map").width()*9/16);
+	$("#title_desc_wrapper").width(middle_column_width);
+
+	//make ride description resizable from the bottom, and scale other items with it
+	$("#ride_description").resizable({
+		handles: 's',
+		resize: function(){
+			$("#save-route-area").height($("#title_desc_wrapper").height()); 
+			$(".sidebar").height( $("#main_bar").height());
+		}
+	});
+
+	$("#save-route-area").width(search_bar_width-20).height($("#title_desc_wrapper").height());
+	$(".sidebar").height( $("#main_bar").height());
+
+}
+
 $(function(){
 
+
+	resize_elements();
+	$(window).resize(function() {
+		resize_elements();
+	});
 
 	//Set up map and renderer
 	initialize_map();
 
 
-	//Resizing of middle_column:
-	var search_bar_width = $("#search_bar").outerWidth(true);//true: include margin
-	var sidebar_width = $(".sidebar").outerWidth(true);
-	var section_width = $("section").width();
-	$("#middle_column").width(section_width - search_bar_width - sidebar_width -50);
-	$("#middle_column").height((section_width - search_bar_width - sidebar_width -50)*9/16);
 
-
-	//Make floated objects the same height. Uses a jQuery plugin.
+	//Make floated objects the same height. Used a jQuery plugin. Not anymore
 	// $("section").fixHeight();
-	var tallest = 0;
-	$('section')
-	.each(function(){
-		var thisHeight = $(this).outerHeight();
-		if (thisHeight > tallest) tallest = thisHeight;
-	})
-	.css({
-		'overflow': 'auto',
-		'height': tallest
-	});
+	// var tallest = 0;
+	// $('section')
+	// .each(function(){
+	// 	var thisHeight = $(this).outerHeight();
+	// 	if (thisHeight > tallest) tallest = thisHeight;
+	// })
+	// .css({
+	// 	'overflow': 'auto',
+	// 	'height': tallest
+	// });
 
 
 	//Make route_form submit by Ajax
