@@ -2,6 +2,8 @@ var map;
 var directionsRenderer;
 var directionsService = new google.maps.DirectionsService();
 
+
+//does some dynamic resizing, especially for when window is resized
 function resize_elements(){
 	
 	var search_bar_width = $("#search_bar").outerWidth(true);//true: include margin
@@ -16,13 +18,28 @@ function resize_elements(){
 	$("#ride_description").resizable({
 		handles: 's',
 		resize: function(){
-			$("#save-route-area").height($("#title_desc_wrapper").height()); 
+			$("#save-route-area").height($("#title_desc_wrapper").outerHeight()); 
 			$(".sidebar").height( $("#main_bar").height());
-		}
+			$("#ride_description").width($("#ride_title").width());
+			$("#ride_description").addClass("ui-state-hover");
+		},
+
 	});
 
-	$("#save-route-area").width(search_bar_width-20).height($("#title_desc_wrapper").height());
+	//maintain the hover effect on the text area when resizing
+	$(".ui-resizable-handle").hover(function(){
+			$("#ride_description").addClass("ui-state-hover");
+		}, function(){
+			$("#ride_description").removeClass("ui-state-hover");
+	});
+
+
+	$("#save-route-area").width(search_bar_width-20).height($("#title_desc_wrapper").outerHeight());
 	$(".sidebar").height( $("#main_bar").height());
+	var title_desc_wrapper_width = $("#title_desc_wrapper").width();
+	$("#ride_description").width(title_desc_wrapper_width*0.9);
+	$("#ride_description").parent('.ui-wrapper').width(title_desc_wrapper_width*0.9+50);
+	$("#ride_title").width(title_desc_wrapper_width*0.9);
 
 }
 
@@ -34,23 +51,13 @@ $(function(){
 		resize_elements();
 	});
 
+	//allow to toggle the first fieldset
+	$(".togglable legend").click(function(){
+		$(this).siblings().slideToggle();
+	});
+
 	//Set up map and renderer
 	initialize_map();
-
-
-
-	//Make floated objects the same height. Used a jQuery plugin. Not anymore
-	// $("section").fixHeight();
-	// var tallest = 0;
-	// $('section')
-	// .each(function(){
-	// 	var thisHeight = $(this).outerHeight();
-	// 	if (thisHeight > tallest) tallest = thisHeight;
-	// })
-	// .css({
-	// 	'overflow': 'auto',
-	// 	'height': tallest
-	// });
 
 
 	//Make route_form submit by Ajax
@@ -129,18 +136,7 @@ function add_properties_to_destination_lis(){
 			calculate_route();
 		}
 	});
-	
-	//This is just some styling for hovering
-	$("#search_bar a").add("#search_bar input").hover(function(){
-		$(this).addClass("ui-state-hover");
-	}, function(){
-		$(this).removeClass("ui-state-hover");
-	});
 
-	//The ENTER handler to calculate the route when ENTER is pressed in a location field.
-	// $("#sortable li input").keypress(function(event){
-	// 	returnKeyHandler(event);
-	// });
 }
 
 //Deletes empty locations, sends request to Google and feeds it to the renderer.
@@ -182,12 +178,15 @@ function calculate_route(){
 
 
       update_location_fields();
+     	update_elevation();
+
     }
     else {alert("something went wrong")}
 	});
 
 //In case error messages from map saving were still there, hide them.
 	$("#error_explanation").hide();
+
 
 }
 
@@ -200,24 +199,6 @@ function update_location_fields(){
 	}
 }
 
-//Trigger a route request when the ENTER key is pressed in a location field.
-//Taken from http://gmaps-samples-v3.googlecode.com/svn/trunk/elevation/elevation-profile.html
-// function returnKeyHandler(e) {
-//   var keycode;
-//   if (window.event) {
-//     keycode = window.event.keyCode;
-//   } else if (e) {
-//     keycode = e.which;
-//   } else {
-//     return true;
-//   }
-//   if (keycode == 13) {
-//      calculate_route();
-//      return false;
-//   } else {
-//      return true;
-//   }
-// }
 
 //Set up the map. Create the renderer
 function initialize_map(){
@@ -310,41 +291,6 @@ function directions_subobject_Mf(){
 	return directions_subobject;
 }
 
-//Moved to application.js because it's used in mutliple pages
-
-// //Builds the request object from the serialized string.
-// //request format for directionsService is
-// // var request = {
-// //       origin: start, 
-// //       destination: end,
-// //       waypoints: waypts,
-// //       optimizeWaypoints: false,
-// //       travelMode: google.maps.DirectionsTravelMode.BICYCLING,
-// //   };
-// function build_request(request_string){
-
-// 	var request = JSON.parse(request_string);
-
-// 	request.optimizeWaypoints = false;
-// 	request.travelMode = google.maps.DirectionsTravelMode.BICYCLING;
-
-// 	return request;
-
-// }
-
-
-// //Just a test function to see if the saving and loading of the path works.
-// function use_saved_request(dirRenderer, request){
-// 	directionsService.route(build_request(request), function(response, status) {
-//     if (status == google.maps.DirectionsStatus.OK) {
-//     	console.log("got response");
-//       dirRenderer.setDirections(response);
-
-      
-
-
-//       update_location_fields();
-//     }
-//     else {alert("something went wrong")}
-// 	});
-// }
+function update_elevation(){
+	console.log("updating elevation");
+}

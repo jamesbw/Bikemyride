@@ -7,48 +7,36 @@
 <div class="left" id="main_bar">
 
 	<%= form_for @ride do |f| %>
-		<%= field_set_tag "Ride details" do %>
+		<%= field_set_tag "Ride details (toggle)", :class => "togglable" do %>
 		<%= render 'shared/error_messages', :object => f.object %>
 		<%= f.text_field :route, :type => 'hidden' %>
 		<div id="save-route-area" class="left">
 		<%= f.submit "Save route",:class => 'ui-state-default round', :id => 'save-route' %>
 		</div>
-<!-- 		<div class='left also_resize' style='width:20px; height: 100px;'></div>
- -->
-		<div class='left' id="title_desc_wrapper">
+		<div class='left round' id="title_desc_wrapper">
 		<%= f.label :title, "Title" -%>
-		<%= f.text_field :title %><br />
+		<%= f.text_field :title, :class => "ui-state-default" %>
 		<%= f.label :description, "Description" %>
-		<%= f.text_area :description %><br />
+		<%= f.text_area :description, :class => "ui-state-default" %>
 		</div>
 		<% end -%>
 	<% end -%>
 
 
-
-
-
-
-
-
-
-
-
 	<div id="search_bar" class="left">
 
 		<%= form_tag "#", :id => "route_form" do |f| %>
-		  
+		  <%= field_set_tag "Define your route" do %>
 		
-			<ul id="sortable" class="left">
-				<li class="ui-state-default round"><span class="handle">A. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>
-				<li class="ui-state-default round"><span class="handle">B. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>
-			</ul>
-			<input  type="submit" id="calc_route" class="ui-state-default round " value="Calc route" ></input>
-			<a href="#" class="ui-state-default round"id ="new_location">Add location</a>
-
+				<ul id="sortable" class="">
+					<li class="ui-state-default round"><span class="handle">A. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>
+					<li class="ui-state-default round"><span class="handle">B. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>
+				</ul>
+				<input  type="submit" id="calc_route" class="ui-state-default round " value="Calc route" ></input>
+				<a href="#" class="ui-state-default round"id ="new_location">Add location</a>
+			<% end -%>
 		<% end -%>
 
-		
 	</div>
 
 
