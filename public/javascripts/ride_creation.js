@@ -1,6 +1,9 @@
 var map;
 var directionsRenderer;
 var directionsService = new google.maps.DirectionsService();
+var elevationService = new google.maps.ElevationService();
+var SAMPLES =256;
+var elevationChart;
 
 
 //does some dynamic resizing, especially for when window is resized
@@ -177,8 +180,7 @@ function calculate_route(){
       
 
 
-      update_location_fields();
-     	update_elevation();
+      // update_location_fields();
 
     }
     else {alert("something went wrong")}
@@ -203,6 +205,9 @@ function update_location_fields(){
 //Set up the map. Create the renderer
 function initialize_map(){
 	
+	$("#graph").hide();
+	$(".sidebar").height( $("#main_bar").height());
+
 	//Map options
 	
 	var latlng = new google.maps.LatLng(37.77493, 	-122.41942);
@@ -227,10 +232,9 @@ function initialize_map(){
 	//Update the location fields if the markers are dragged on the map.
 	//Update the hidden form that will save the route.
 	google.maps.event.addListener(directionsRenderer,"directions_changed",function(){
-		console.log("directions changed");
 		update_location_fields();
 		update_hidden_form();
-		console.log(request_to_be_saved());
+		update_elevation();
 	});
 
 	//Add the bike layer
@@ -293,4 +297,56 @@ function directions_subobject_Mf(){
 
 function update_elevation(){
 	console.log("updating elevation");
+	elevationService.getElevationAlongPath({
+    path: directionsRenderer.directions.routes[0].overview_path,
+    samples: SAMPLES,
+  }, plotElevation);
+  $("#graph").show();
+  $(".sidebar").height( $("#main_bar").height());
+}
+
+function plotElevation(results){
+	var elevations =[];
+	for( var i = 0; i < results.length; i++){
+		elevations.push(results[i].elevation);
+	}
+	console.log(elevations);
+
+	elevationChart = new Highcharts.Chart({
+		chart: {
+		  renderTo: 'graph',
+		  defaultSeriesType: 'area'
+		},
+		title: {
+		  text: null
+		},
+		xAxis: {
+		  // categories: ['Profile']
+		},
+		yAxis: {
+		  title: {
+		     text: 'Elevation (m)',
+			  },
+	    startOnTick: false,
+	    endOnTick: false,
+		},
+		plotOptions: {
+         area: {
+            marker: {
+               enabled: false,
+               symbol: 'circle',
+               radius: 2,
+               states: {
+                  hover: {
+                     enabled: true
+                  }
+               }
+            }
+         }
+      },
+		series: [{
+		  showInLegend: false,
+		  data: elevations,
+		}]
+  });
 }

@@ -1,6 +1,7 @@
 <% content_for :extra_header_stuff do %>
 	<%= javascript_include_tag "http://maps.google.com/maps/api/js?sensor=false" %>
 	<%= javascript_include_tag "ride_creation.js" %>
+	<%= javascript_include_tag "highcharts.js" %>
 	<%= stylesheet_link_tag "ride_creation.css" %>
 <% end %>
 
@@ -42,7 +43,7 @@
 
 	<div id="middle_column" class="left clearfix">	
 		<div id="map" class="round"></div>
-		<div id="graph"><h1>Elevation graph coming here</h1></div>
+		<div id="graph"></div>
 	</div>
 
 </div>
