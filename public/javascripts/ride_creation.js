@@ -421,7 +421,7 @@ function getGrades(elevationsArray, totalDistance){
 	var grades =[];
 	grades.push(0);
 	for( var i=1; i< elevationsArray.length -1; i++){
-		grades.push((elevationsArray[i+1]-elevationsArray[i-1])/(totalDistance/elevationsArray.length)*100);
+		grades.push((elevationsArray[i+1]-elevationsArray[i-1])/(2*totalDistance/elevationsArray.length)*100);
 	}
 	grades.push(0);
 	return grades;
