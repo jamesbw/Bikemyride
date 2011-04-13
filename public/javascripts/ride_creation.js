@@ -1,9 +1,16 @@
-var map;
-var directionsRenderer;
+var map = null;
+var directionsRenderer = null;
 var directionsService = new google.maps.DirectionsService();
 var elevationService = new google.maps.ElevationService();
-var SAMPLES =256;
-var elevationChart;
+var SAMPLES = 256;
+var elevationChart = null;
+var distanceInMeters = 0;
+var distanceInMiles = 0;
+var elevationsInMeters=[];
+var elevationsInFeet=[];
+var mousemarker = null;
+var grades =[]; //grades from -100 to 100 (%)
+var elevations =[]; //array of google elevation objects. they contain location and elevation
 
 
 //does some dynamic resizing, especially for when window is resized
@@ -99,16 +106,16 @@ $(function(){
 });
 
 
-//Adds a line item to #sortable if there are fewer than 10.
-//When there are ten, the button is disabled.
+//Adds a line item to #sortable if there are fewer than 6.
+//When there are six, the button is disabled.
 //Every time a list item is added, the properties have to be set on this item. Currently all the line items are reset (inefficient but okay).
 function add_location(){
-	if($("#sortable li").length < 10){
+	if($("#sortable li").length < 6){
 		$("#sortable").append('<li class="ui-state-default round"><span class="handle">D. </span><input class="ui-state-default" type="text" value=""></input> <span class="delete">&#10008;</span></li>');
 		$("#sortable li:last input").focus();
 		add_properties_to_destination_lis();
 		relabel_locations();
-		if($("#sortable li").length == 10){
+		if($("#sortable li").length == 6){
 			$("#new_location").addClass("ui-state-disabled");
 		}
 	}
@@ -231,10 +238,13 @@ function initialize_map(){
 
 	//Update the location fields if the markers are dragged on the map.
 	//Update the hidden form that will save the route.
+	//Update elevation and graph
+	//Update distances
 	google.maps.event.addListener(directionsRenderer,"directions_changed",function(){
 		update_location_fields();
 		update_hidden_form();
 		update_elevation();
+		update_distances();
 	});
 
 	//Add the bike layer
@@ -295,23 +305,30 @@ function directions_subobject_Mf(){
 	return directions_subobject;
 }
 
+//runs the elevation request to google
 function update_elevation(){
 	console.log("updating elevation");
 	elevationService.getElevationAlongPath({
     path: directionsRenderer.directions.routes[0].overview_path,
     samples: SAMPLES,
   }, plotElevation);
-  $("#graph").show();
-  $(".sidebar").height( $("#main_bar").height());
+  $("#graph").show(); //display the graph div when elevations have been calculated
+  $(".sidebar").height( $("#main_bar").height()); //graph has been added, so the sidebar must be resized
 }
 
+//Updates the elevation arrays and creates the Highcharts graph
 function plotElevation(results){
-	var elevations =[];
+	elevations = results; //updates elevations array
+	elevationsInMeters =[]; //empty this array, ready for pushes
+	grades =[];
 	for( var i = 0; i < results.length; i++){
-		elevations.push(results[i].elevation);
+		elevationsInMeters.push(Math.max(results[i].elevation,0)); //floor at 0 (GG Bridge is negative, screw death valley for now)
 	}
-	console.log(elevations);
+	grades =getGrades(elevationsInMeters, distanceInMeters);
 
+	elevationsInFeet = elevationsInMeters.map(metersToFeet);
+
+//See HighCharts API reference for details
 	elevationChart = new Highcharts.Chart({
 		chart: {
 		  renderTo: 'graph',
@@ -321,17 +338,39 @@ function plotElevation(results){
 		  text: null
 		},
 		xAxis: {
-		  // categories: ['Profile']
+			title: {
+		     text: 'Distance (miles)',
+			  },
 		},
 		yAxis: {
 		  title: {
-		     text: 'Elevation (m)',
+		     text: 'Elevation (ft)',
 			  },
 	    startOnTick: false,
 	    endOnTick: false,
 		},
+		tooltip: {
+			shared: true,
+			formatter: function() {
+
+						//taking advantage of this event to update moving marker on map
+						var index = Math.round(this.x/(distanceInMiles/SAMPLES));
+	    			      if (mousemarker == null) {
+							        mousemarker = new google.maps.Marker({
+							          position: elevations[index].location,
+							          map: map,
+							          icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+							        });
+							      } else {
+							        mousemarker.setPosition(elevations[index].location);
+							      }
+            return "Elevation: "+Highcharts.numberFormat(this.points[0].y,0)+" ft <br/> Grade: "+Highcharts.numberFormat(grades[index],0)+"%";
+         },
+		},
 		plotOptions: {
          area: {
+         		pointStart: 0,
+         		pointInterval: distanceInMiles/SAMPLES,
             marker: {
                enabled: false,
                symbol: 'circle',
@@ -341,12 +380,58 @@ function plotElevation(results){
                      enabled: true
                   }
                }
-            }
-         }
+            },
+            events: {
+            	mouseOut: function(){
+            			mousemarker.setMap(null);
+            			mousemarker = null;
+            		}
+            },
+         },
       },
 		series: [{
 		  showInLegend: false,
-		  data: elevations,
+		  data: elevationsInFeet,
+		  id: 'elevations',
 		}]
   });
+}
+
+//iterates on the legs of the route to get total distance
+function getDistanceInMeters(dirRenderer){
+	var distance = 0;
+	var numLegs = dirRenderer.getDirections().routes[0].legs.length;
+	for( var i=0; i <numLegs; i++){
+		distance += dirRenderer.getDirections().routes[0].legs[i].distance.value
+	}
+	return distance;
+}
+
+//iterates on the legs of the route to get total duration
+function  getDurationInSeconds(dirRenderer){
+	var duration = 0;
+	var numLegs = dirRenderer.getDirections().routes[0].legs.length;
+	for( var i=0; i <numLegs; i++){
+		distance += dirRenderer.getDirections().routes[0].legs[i].duration.value
+	}
+	return duration;
+}
+
+function getGrades(elevationsArray, totalDistance){
+	var grades =[];
+	grades.push(0);
+	for( var i=1; i< elevationsArray.length -1; i++){
+		grades.push((elevationsArray[i+1]-elevationsArray[i-1])/(totalDistance/elevationsArray.length)*100);
+	}
+	grades.push(0);
+	return grades;
+}
+
+function metersToFeet(dist){
+	return dist/.305;
+}
+
+function update_distances(){
+	distanceInMeters = getDistanceInMeters(directionsRenderer);
+	distanceInMiles  = distanceInMeters / 1609;
 }
