@@ -1,6 +1,6 @@
 <!-- this is the standard accordion layout for jQuery UI. See their demo page for details. -->
 
-<h3><a href="#">Ride Title</a></h3>
+<h3><a href="#"><%= ride.title %>  <span class="right"><%= "Distance: #{ride.total_distance} mi" %> &nbsp | &nbsp<%="  Climb: #{ride.total_climb} ft" %></span></a></h3>
 
 <div class="ride" id="<%= ride.id %>">
 <!-- content is loaded lazily through ajax -->

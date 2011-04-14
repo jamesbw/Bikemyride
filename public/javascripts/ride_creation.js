@@ -2,7 +2,7 @@ var map = null;
 var directionsRenderer = null;
 var directionsService = new google.maps.DirectionsService();
 var elevationService = new google.maps.ElevationService();
-var SAMPLES = 256;
+// var SAMPLES = 256;
 var elevationChart = null;
 var distanceInMeters = 0;
 var distanceInMiles = 0;
@@ -11,6 +11,8 @@ var elevationsInFeet=[];
 var mousemarker = null;
 var grades =[]; //grades from -100 to 100 (%)
 var elevations =[]; //array of google elevation objects. they contain location and elevation
+var totalClimb = 0;
+var maxGrade = 0;
 
 
 //does some dynamic resizing, especially for when window is resized
@@ -181,7 +183,6 @@ function calculate_route(){
 
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
-    	console.log("got response");
       directionsRenderer.setDirections(response);
 
       
@@ -242,7 +243,7 @@ function initialize_map(){
 	//Update distances
 	google.maps.event.addListener(directionsRenderer,"directions_changed",function(){
 		update_location_fields();
-		update_hidden_form();
+		update_hidden_form_route();
 		update_elevation();
 		update_distances();
 	});
@@ -252,9 +253,8 @@ function initialize_map(){
   bikeLayer.setMap(map);
 }
 
-function update_hidden_form(){
+function update_hidden_form_route(){
 	$("#ride_route").val(request_to_be_saved());
-	console.log("hidden form has been updated");
 }
 
 //Generates a JSON-serialized string to be stored in the database.
@@ -307,13 +307,14 @@ function directions_subobject_Mf(){
 
 //runs the elevation request to google
 function update_elevation(){
-	console.log("updating elevation");
 	elevationService.getElevationAlongPath({
     path: directionsRenderer.directions.routes[0].overview_path,
     samples: SAMPLES,
   }, plotElevation);
   $("#graph").show(); //display the graph div when elevations have been calculated
   $(".sidebar").height( $("#main_bar").height()); //graph has been added, so the sidebar must be resized
+
+
 }
 
 //Updates the elevation arrays and creates the Highcharts graph
@@ -322,11 +323,22 @@ function plotElevation(results){
 	elevationsInMeters =[]; //empty this array, ready for pushes
 	grades =[];
 	for( var i = 0; i < results.length; i++){
-		elevationsInMeters.push(Math.max(results[i].elevation,0)); //floor at 0 (GG Bridge is negative, screw death valley for now)
+		elevationsInMeters.push(Math.max(Math.round(results[i].elevation),0)); //floor at 0 (GG Bridge is negative, screw death valley for now)
 	}
 	grades =getGrades(elevationsInMeters, distanceInMeters);
 
 	elevationsInFeet = elevationsInMeters.map(metersToFeet);
+
+	$("#ride_elevations").val(elevationsInFeet.join());
+
+  totalClimb = getTotalClimb(elevationsInFeet);
+  $("#total_climb").html("total climb: "+totalClimb + " ft");
+  $("#ride_total_climb").val(totalClimb);
+
+
+  maxGrade = grades.max();
+  $("#max_grade").html("max grade: "+maxGrade+" %");
+  $("#ride_max_grade").val(maxGrade);
 
 //See HighCharts API reference for details
 	elevationChart = new Highcharts.Chart({
@@ -402,7 +414,7 @@ function getDistanceInMeters(dirRenderer){
 	var distance = 0;
 	var numLegs = dirRenderer.getDirections().routes[0].legs.length;
 	for( var i=0; i <numLegs; i++){
-		distance += dirRenderer.getDirections().routes[0].legs[i].distance.value
+		distance += Math.round(dirRenderer.getDirections().routes[0].legs[i].distance.value);
 	}
 	return distance;
 }
@@ -412,7 +424,7 @@ function  getDurationInSeconds(dirRenderer){
 	var duration = 0;
 	var numLegs = dirRenderer.getDirections().routes[0].legs.length;
 	for( var i=0; i <numLegs; i++){
-		distance += dirRenderer.getDirections().routes[0].legs[i].duration.value
+		distance += Math.round(dirRenderer.getDirections().routes[0].legs[i].duration.value);
 	}
 	return duration;
 }
@@ -421,17 +433,30 @@ function getGrades(elevationsArray, totalDistance){
 	var grades =[];
 	grades.push(0);
 	for( var i=1; i< elevationsArray.length -1; i++){
-		grades.push((elevationsArray[i+1]-elevationsArray[i-1])/(2*totalDistance/elevationsArray.length)*100);
+		grades.push(Math.round((elevationsArray[i+1]-elevationsArray[i-1])/(2*totalDistance/elevationsArray.length)*100));
 	}
 	grades.push(0);
 	return grades;
 }
 
 function metersToFeet(dist){
-	return dist/.305;
+	return Math.round(dist/.305);
 }
 
 function update_distances(){
 	distanceInMeters = getDistanceInMeters(directionsRenderer);
-	distanceInMiles  = distanceInMeters / 1609;
+	distanceInMiles  = Math.round(distanceInMeters / 1609*10)/10;//one decimal point
+	$("#total_distance").html("total distance: "+distanceInMiles + " miles");
+	$("#ride_total_distance").val(distanceInMiles);
+}
+
+function getTotalClimb(elevations){
+	var climb = 0;
+	for(var i=1; i  < elevations.length; i++){
+		var stepClimb = elevations[i]-elevations[i-1];
+		if(stepClimb >0){
+			climb += stepClimb;
+		}
+	}
+	return climb;
 }

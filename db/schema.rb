@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110402060835) do
+ActiveRecord::Schema.define(:version => 20110414030945) do
 
   create_table "rides", :force => true do |t|
     t.integer  "user_id"
@@ -19,6 +19,10 @@ ActiveRecord::Schema.define(:version => 20110402060835) do
     t.text     "route"
     t.string   "title"
     t.text     "description"
+    t.integer  "max_grade"
+    t.float    "total_distance"
+    t.integer  "total_climb"
+    t.text     "elevations"
   end
 
   add_index "rides", ["user_id"], :name => "index_rides_on_user_id"

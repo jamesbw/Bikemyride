@@ -100,8 +100,8 @@ describe UsersController do
       ride1 = Factory(:ride, :user => @user, :route => "Foo bar")
       ride2 = Factory(:ride, :user => @user, :route => "Baz quux")
       get :show, :id => @user
-      response.should have_selector("span.content", :content => ride1.route)
-      response.should have_selector("span.content", :content => ride2.route)
+      response.should have_selector("a", :content => ride1.title)
+      response.should have_selector("a", :content => ride2.title)
     end
   end
 

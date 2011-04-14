@@ -11,6 +11,10 @@
 		<%= field_set_tag "Ride details (toggle)", :class => "togglable" do %>
 		<%= render 'shared/error_messages', :object => f.object %>
 		<%= f.text_field :route, :type => 'hidden' %>
+		<%= f.text_field :max_grade, :type => 'hidden' %>
+		<%= f.text_field :total_distance, :type => 'hidden' %>
+		<%= f.text_field :total_climb, :type => 'hidden' %>
+		<%= f.text_field :elevations, :type => 'hidden' %>
 		<div id="save-route-area" class="left">
 		<%= f.submit "Save route",:class => 'ui-state-default round', :id => 'save-route' %>
 		</div>
@@ -37,6 +41,10 @@
 				<a href="#" class="ui-state-default round"id ="new_location">Add location</a>
 			<% end -%>
 		<% end -%>
+
+		<div id="total_distance"></div>
+		<div id='total_climb'></div>
+		<div id='max_grade'></div>
 
 	</div>
 

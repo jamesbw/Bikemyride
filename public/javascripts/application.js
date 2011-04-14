@@ -1,6 +1,21 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
+Array.prototype.max = function() {
+var max = this[0];
+var len = this.length;
+for (var i = 1; i < len; i++) if (this[i] > max) max = this[i];
+return max;
+}
+Array.prototype.min = function() {
+var min = this[0];
+var len = this.length;
+for (var i = 1; i < len; i++) if (this[i] < min) min = this[i];
+return min;
+}
+
+
+var SAMPLES = 256;
 
 	//Change ui state on hover
 
@@ -42,7 +57,6 @@ function build_request(request_string){
 function use_saved_request(dirRenderer, request){
 	directionsService.route(build_request(request), function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
-    	console.log("got response");
       dirRenderer.setDirections(response);
 
       // dirRenderer.getMap().getDiv().style.display = 'block';

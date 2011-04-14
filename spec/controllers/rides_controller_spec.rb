@@ -25,7 +25,7 @@ describe RidesController do
     describe "failure" do
 
       before(:each) do
-        @attr = { :route => "" }
+        @attr = { :route => "", :title => "" }
       end
 
       it "should not create a ride" do
@@ -44,7 +44,7 @@ describe RidesController do
 
       before(:each) do
         #How to check for validity?
-        @attr = { :route => "Valid route" }
+        @attr = { :route => "Valid route", :title => "valid titleeeee", :description => "valiiiiid descc" }
       end
 
       it "should create a ride" do

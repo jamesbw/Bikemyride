@@ -1,8 +1,11 @@
 <!-- this view is loaded lazily in the profile page with ajax
  -->
 
-<div id= "<%= 'map'+ @ride.id.to_s %>" class="map left round"></div>
+<div id= "<%= 'map'+ @ride.id.to_s %>" class="map round"></div>
+<div id= "<%= 'graph'+ @ride.id.to_s %>" class="graph"></div>
 <span class="route" style="display:none;"> <%=@ride.route -%> </span>
+<span class="elevations" style="display:none;"> <%=@ride.elevations -%> </span>
+<span class="distance" style="display:none;"> <%=@ride.total_distance -%> </span>
 <span class="timestamp">
   Created <%= time_ago_in_words(@ride.created_at) %> ago.
 </span>

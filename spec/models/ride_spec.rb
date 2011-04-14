@@ -4,7 +4,8 @@ describe Ride do
   before(:each) do
     @user = Factory(:user)
     #should have route validation
-    @attr = { :route => "value for route" }
+    #should have json array
+    @attr = { :route => "value for route", :title => "valid title", :max_grade => 5, :total_distance => 50.1, :total_climb => 2000, :elevations => "json array"}
   end
 
   it "should create a new instance given valid attributes" do
@@ -32,9 +33,38 @@ describe Ride do
       Ride.new(@attr).should_not be_valid
     end
 
-    it "should require nonblank content" do
-      @user.rides.build(:route => "  ").should_not be_valid
+    it "should require nonblank route" do
+      @user.rides.build(@attr.merge(:route => "  ")).should_not be_valid
     end
+
+    it "should require positive total climb" do
+      @user.rides.build(@attr.merge(:total_climb => -1)).should_not be_valid
+    end
+
+    it "should require nonblank elevations" do
+      @user.rides.build(@attr.merge(:elevations => "  ")).should_not be_valid
+    end
+
+    it "should require positive total distance " do
+      @user.rides.build(@attr.merge(:total_distance => -1)).should_not be_valid
+    end
+
+    it "should require positive max grade " do
+      @user.rides.build(@attr.merge(:max_grade => -1)).should_not be_valid
+    end
+
+    it "should reject max grades above 100 " do
+      @user.rides.build(@attr.merge(:max_grade => 101)).should_not be_valid
+    end
+
+    it "should reject long titles" do
+      @user.rides.build(@attr.merge(:title => "a" * 141)).should_not be_valid
+    end
+
+    it "should require non blank title" do
+      @user.rides.build(@attr.merge(:title => "  ")).should_not be_valid
+    end
+
 
   end
 

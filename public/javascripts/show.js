@@ -1,4 +1,5 @@
 var maps=[];
+var graphs=[];
 var directionsRenderers=[];
 var directionsService = new google.maps.DirectionsService();
 
@@ -18,7 +19,8 @@ $(function(){
 
 				//load view through ajax request. Call back function to run only once content has been loaded.
 				ui.newContent.load('/rides/show_summary/'+ride_id,function(){
-					initialize(ride_id);
+					initialize_map(ride_id);
+					initialize_graph(ride_id);
 					ui.newContent.addClass("loaded");
 					// google.maps.event.trigger(maps[ride_id], 'resize');
 				});
@@ -43,7 +45,7 @@ $(function(){
 //Creates map
 //Creates directionsRenderer
 //Runs directions request
-function initialize(map_index){
+function initialize_map(map_index){
 
 	var latlng = new google.maps.LatLng(37.77493, 	-122.41942);
   var mapOptions = {
@@ -96,4 +98,80 @@ function initialize(map_index){
   // $("#map"+map_index).toggle();
 
 
+}
+
+function initialize_graph(ride_id){
+	var elevationsInFeet = $("#"+ride_id).children(".elevations").html().split(',').map(function(x) { return parseInt(x, 10) });
+	var distanceInMiles = parseFloat($("#"+ride_id).children(".distance").html());
+  //remove hidden elevations array and distance
+  $(".elevations").remove();
+  $(".distance").remove();
+
+	graphs[ride_id] = new Highcharts.Chart({
+		chart: {
+		  renderTo: 'graph'+ride_id,
+		  defaultSeriesType: 'area'
+		},
+		title: {
+		  text: null
+		},
+		xAxis: {
+			title: {
+		     text: 'Distance (miles)',
+			  },
+		},
+		yAxis: {
+		  title: {
+		     text: 'Elevation (ft)',
+			  },
+	    startOnTick: false,
+	    endOnTick: false,
+		},
+		tooltip: {
+			enabled: false,
+			// shared: true,
+			// formatter: function() {
+
+			// 			//taking advantage of this event to update moving marker on map
+			// 			var index = Math.round(this.x/(distanceInMiles/SAMPLES));
+	  //   			     //  if (mousemarker == null) {
+			// 				      //   mousemarker = new google.maps.Marker({
+			// 				      //     position: elevations[index].location,
+			// 				      //     map: maps[ride_id],
+			// 				      //     icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+			// 				      //   });
+			// 				      // } else {
+			// 				      //   mousemarker.setPosition(elevations[index].location);
+			// 				      // }
+   //          return "Elevation: "+Highcharts.numberFormat(this.points[0].y,0)+" ft";
+   //       },
+		},
+		plotOptions: {
+         area: {
+         		pointStart: 0,
+         		pointInterval: distanceInMiles/SAMPLES,
+            marker: {
+               enabled: false,
+               symbol: 'circle',
+               radius: 2,
+               // states: {
+               //    hover: {
+               //       enabled: true
+               //    }
+               // }
+            },
+            // events: {
+            // 	mouseOut: function(){
+            // 			mousemarker.setMap(null);
+            // 			mousemarker = null;
+            // 		}
+            // },
+         },
+      },
+		series: [{
+		  showInLegend: false,
+		  data: elevationsInFeet,
+		  id: 'elevations',
+		}]
+  });
 }
