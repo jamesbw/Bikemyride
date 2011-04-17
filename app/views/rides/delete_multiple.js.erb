@@ -1,0 +1,24 @@
+
+<% if params[:ride_ids] %>
+<% for i in 0..(params[:ride_ids].length-1) do %>
+var content = $("#<%=  params[:ride_ids][i] %>");
+var header = content.prev();
+var checkbox = header.prev();
+// console.log(<%= params[:ride_ids][i] %>);
+// console.log(content);
+// console.log(header);
+// console.log(checkbox);
+header.remove();
+content.remove();
+checkbox.remove();
+<% end %>
+if($(".flash").size() >0){
+	$(".flash").html("<%= flash[:notice] %>");
+	console.log("flash updated ");
+}
+else {
+	$("section").prepend('<div class="flash notice"><%= flash[:notice] %></div>');
+	console.log("flash added");
+}
+<% end %>
+

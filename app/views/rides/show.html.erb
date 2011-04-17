@@ -1,6 +1,11 @@
-<!-- this view is loaded lazily in the profile page with ajax
- -->
-<%= link_to "View details", @ride %>
+<% content_for :extra_header_stuff do %>
+  <%= javascript_include_tag "http://maps.google.com/maps/api/js?sensor=false" %>
+  <%= javascript_include_tag "ride_creation.js" %>
+  <%= stylesheet_link_tag "ride_creation.css" %>
+  <%= javascript_include_tag "highcharts.js" %>
+<% end %>
+
+
 <%= link_to "Save to my rides" if current_user != @user && signed_in? %>
 <%= link_to "Edit ride", edit_ride_path(@ride) if current_user == @user %>
 <div id= "<%= 'map'+ @ride.id.to_s %>" class="map round"></div>
@@ -11,3 +16,5 @@
 <span class="timestamp">
   Created <%= time_ago_in_words(@ride.created_at) %> ago.
 </span>
+
+<%= javascript_include_tag "show_ride.js" %>

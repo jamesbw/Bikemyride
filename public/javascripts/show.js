@@ -5,12 +5,15 @@ var directionsService = new google.maps.DirectionsService();
 
 $(function(){
 
+// var checkboxes = $("input");
+// checkboxes.detach();
 
 	//Make the accordion
 	$(".rides").accordion({
 		collapsible: true,
 		autoHeight: false,
 		active: false,
+		header: 'h3',
 		changestart: function(event,ui){
 			// if the accordion is expanding (not contracting) and the content hasn't been loaded yet
 			if(ui.newContent.size()>0 && !ui.newContent.hasClass("loaded")){
@@ -36,7 +39,10 @@ $(function(){
 		},
 	});
 
-
+	// checkboxes.each(function(index){
+	// 	$("h3").eq(index).before($(this));
+	// 	// $(this).appendTo($("h3")[index]);
+	// });
 
 
 });

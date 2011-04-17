@@ -52,8 +52,10 @@ function build_request(request_string){
 }
 
 
+
+
 //Just a test function to see if the saving and loading of the path works.
-// Now used to load the maps in the profiles
+// Now used to load the maps in the profiles, show and edit
 function use_saved_request(dirRenderer, request){
 	directionsService.route(build_request(request), function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {

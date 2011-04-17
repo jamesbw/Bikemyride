@@ -15,11 +15,17 @@
         <%= @user.name %>
       </h1>
       <% unless @user.rides.empty? %>
-        <div class="rides" summary="User rides">
-          <%= render @rides %>
-        </div>
-        <%= will_paginate @rides %>
+        <% form_tag delete_multiple_path, :method => :post, :remote => true do %>
+
+          <%= submit_tag "Delete", :confirm => "Are you sure you want to delete these rides",:id => 'delete', :class => '' %>
+
+
+          <div class="rides" summary="User rides">
+            <%= render @rides %>
+          </div>
+          <%= will_paginate @rides %>
         <% end %>      
+      <% end -%>
     </td>
     <td class="sidebar round">
       <strong>Name</strong> <%= @user.name %><br />

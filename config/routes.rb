@@ -3,7 +3,7 @@ Bikemyride::Application.routes.draw do
 
   resources :users
   resources :sessions, :only => [:new, :create, :destroy]
-  resources :rides, :only => [:create, :destroy, :show_summary]
+  resources :rides, :only => [:create, :destroy, :show_summary, :edit, :show, :update]
 
   
   match '/signin',  :to => 'sessions#new'
@@ -19,6 +19,8 @@ Bikemyride::Application.routes.draw do
 
   #for the lazy-loading of the rides in the profile page
   match '/rides/show_summary/:id', :to => 'rides#show_summary', :as => 'show_summary'
+
+  match '/rides/delete_multiple', :to => 'rides#delete_multiple', :as => 'delete_multiple'
 
 
   # The priority is based upon order of creation:

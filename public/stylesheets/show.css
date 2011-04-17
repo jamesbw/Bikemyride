@@ -9,3 +9,15 @@
 	width: 100%;
 	margin-top: 20px;
 }
+
+input[type="checkbox"]{
+	left: -30px;
+	position: relative;
+	top: 33px;
+	height: 0px;
+	width:0px;
+}
+
+#delete{
+	margin-top: 20px;
+}

@@ -244,7 +244,7 @@ function initialize_map(){
 	google.maps.event.addListener(directionsRenderer,"directions_changed",function(){
 		update_location_fields();
 		update_hidden_form_route();
-		update_elevation();
+		update_elevation("graph");
 		update_distances();
 	});
 
@@ -306,107 +306,109 @@ function directions_subobject_Mf(){
 }
 
 //runs the elevation request to google
-function update_elevation(){
+function update_elevation(graph_id){
 	elevationService.getElevationAlongPath({
     path: directionsRenderer.directions.routes[0].overview_path,
     samples: SAMPLES,
-  }, plotElevation);
-  $("#graph").show(); //display the graph div when elevations have been calculated
+  }, generatePlotElevation(graph_id));
+  $("#"+graph_id).show(); //display the graph div when elevations have been calculated
   $(".sidebar").height( $("#main_bar").height()); //graph has been added, so the sidebar must be resized
 
 
 }
 
 //Updates the elevation arrays and creates the Highcharts graph
-function plotElevation(results){
-	elevations = results; //updates elevations array
-	elevationsInMeters =[]; //empty this array, ready for pushes
-	grades =[];
-	for( var i = 0; i < results.length; i++){
-		elevationsInMeters.push(Math.max(Math.round(results[i].elevation),0)); //floor at 0 (GG Bridge is negative, screw death valley for now)
-	}
-	grades =getGrades(elevationsInMeters, distanceInMeters);
+function generatePlotElevation(graph_id){
+	return function plotElevation(results){
+		elevations = results; //updates elevations array
+		elevationsInMeters =[]; //empty this array, ready for pushes
+		grades =[];
+		for( var i = 0; i < results.length; i++){
+			elevationsInMeters.push(Math.max(Math.round(results[i].elevation),0)); //floor at 0 (GG Bridge is negative, screw death valley for now)
+		}
+		grades =getGrades(elevationsInMeters, distanceInMeters);
 
-	elevationsInFeet = elevationsInMeters.map(metersToFeet);
+		elevationsInFeet = elevationsInMeters.map(metersToFeet);
 
-	$("#ride_elevations").val(elevationsInFeet.join());
+		$("#ride_elevations").val(elevationsInFeet.join());
 
-  totalClimb = getTotalClimb(elevationsInFeet);
-  $("#total_climb").html("total climb: "+totalClimb + " ft");
-  $("#ride_total_climb").val(totalClimb);
+	  totalClimb = getTotalClimb(elevationsInFeet);
+	  $("#total_climb").html("total climb: "+totalClimb + " ft");
+	  $("#ride_total_climb").val(totalClimb);
 
 
-  maxGrade = grades.max();
-  $("#max_grade").html("max grade: "+maxGrade+" %");
-  $("#ride_max_grade").val(maxGrade);
+	  maxGrade = grades.max();
+	  $("#max_grade").html("max grade: "+maxGrade+" %");
+	  $("#ride_max_grade").val(maxGrade);
 
-//See HighCharts API reference for details
-	elevationChart = new Highcharts.Chart({
-		chart: {
-		  renderTo: 'graph',
-		  defaultSeriesType: 'area'
-		},
-		title: {
-		  text: null
-		},
-		xAxis: {
+	//See HighCharts API reference for details
+		elevationChart = new Highcharts.Chart({
+			chart: {
+			  renderTo: graph_id,
+			  defaultSeriesType: 'area'
+			},
 			title: {
-		     text: 'Distance (miles)',
-			  },
-		},
-		yAxis: {
-		  title: {
-		     text: 'Elevation (ft)',
-			  },
-	    startOnTick: false,
-	    endOnTick: false,
-		},
-		tooltip: {
-			shared: true,
-			formatter: function() {
+			  text: null
+			},
+			xAxis: {
+				title: {
+			     text: 'Distance (miles)',
+				  },
+			},
+			yAxis: {
+			  title: {
+			     text: 'Elevation (ft)',
+				  },
+		    startOnTick: false,
+		    endOnTick: false,
+			},
+			tooltip: {
+				shared: true,
+				formatter: function() {
 
-						//taking advantage of this event to update moving marker on map
-						var index = Math.round(this.x/(distanceInMiles/SAMPLES));
-	    			      if (mousemarker == null) {
-							        mousemarker = new google.maps.Marker({
-							          position: elevations[index].location,
-							          map: map,
-							          icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-							        });
-							      } else {
-							        mousemarker.setPosition(elevations[index].location);
-							      }
-            return "Elevation: "+Highcharts.numberFormat(this.points[0].y,0)+" ft <br/> Grade: "+Highcharts.numberFormat(grades[index],0)+"%";
-         },
-		},
-		plotOptions: {
-         area: {
-         		pointStart: 0,
-         		pointInterval: distanceInMiles/SAMPLES,
-            marker: {
-               enabled: false,
-               symbol: 'circle',
-               radius: 2,
-               states: {
-                  hover: {
-                     enabled: true
-                  }
-               }
-            },
-            events: {
-            	mouseOut: function(){
-            			mousemarker.setMap(null);
-            			mousemarker = null;
-            		}
-            },
-         },
-      },
-		series: [{
-		  showInLegend: false,
-		  data: elevationsInFeet,
-		  id: 'elevations',
-		}]
-  });
+							//taking advantage of this event to update moving marker on map
+							var index = Math.round(this.x/(distanceInMiles/SAMPLES));
+		    			      if (mousemarker == null) {
+								        mousemarker = new google.maps.Marker({
+								          position: elevations[index].location,
+								          map: map,
+								          icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+								        });
+								      } else {
+								        mousemarker.setPosition(elevations[index].location);
+								      }
+	            return "Elevation: "+Highcharts.numberFormat(this.points[0].y,0)+" ft <br/> Grade: "+Highcharts.numberFormat(grades[index],0)+"%";
+	         },
+			},
+			plotOptions: {
+	         area: {
+	         		pointStart: 0,
+	         		pointInterval: distanceInMiles/SAMPLES,
+	            marker: {
+	               enabled: false,
+	               symbol: 'circle',
+	               radius: 2,
+	               states: {
+	                  hover: {
+	                     enabled: true
+	                  }
+	               }
+	            },
+	            events: {
+	            	mouseOut: function(){
+	            			mousemarker.setMap(null);
+	            			mousemarker = null;
+	            		}
+	            },
+	         },
+	      },
+			series: [{
+			  showInLegend: false,
+			  data: elevationsInFeet,
+			  id: 'elevations',
+			}]
+	  });
+	};
 }
 
 //iterates on the legs of the route to get total distance

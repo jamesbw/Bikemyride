@@ -221,7 +221,9 @@ h1.ride {
 }
 
 div.rides {
-  margin-top: 1em;
+/*  margin-top: 1em;
+*/
+margin-left: 20px;
 }
 /*
 div.rides div.ride {
@@ -262,11 +264,11 @@ div.user_info div.rides {
   font-size: 80%;
 }
 
-form.new_ride {
+form.new_ride, form.edit_ride {
   margin-bottom: 2em;
 }
 
-form.new_ride textarea {
+form.new_ride textarea, form.edit_ride textarea {
   height: 4em;
   margin-bottom: 0;
 }
