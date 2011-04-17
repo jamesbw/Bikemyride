@@ -52,12 +52,12 @@ class RidesController < ApplicationController
     if(params[:ride_ids]) 
 
       #make sure the rides all belong to the current user
-      params[:ride_ids].each do ride_id
+      params[:ride_ids].each do |ride_id|
         @user = Ride.find(ride_id).user
         redirect_to(root_path) unless current_user?(@user)
       end
 
-      # Ride.destroy(params[:ride_ids])
+      Ride.destroy(params[:ride_ids])
       flash.now[:notice] = "#{pluralize(params[:ride_ids].length,'ride')} successfully deleted"
     
       respond_to do |format|
